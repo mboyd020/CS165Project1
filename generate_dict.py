@@ -12,6 +12,6 @@ for i in range(1, 7):
         password_file.write(password + "\n")
         count += 1
         if (count % 1000000) == 0:
-            print(f"{count/321272406}% done")
+            print(f"{(count/321272406) * 100}% done")
 print("done")
 password_file.close()
