@@ -4,11 +4,12 @@ from multiprocessing import Pool, cpu_count
 fullHash = "team5:$1$zLGo2l86$srZPtyJQb2sQIaMdtHosV1:16653:0:99999:7:::"
 salt = b"zLGo2l86"
 hash = b"srZPtyJQb2sQIaMdtHosV1"
-
+correct_guess_lts = open("correct.txt", "w")
 def guess(guess):
   hashed = hashlib.md5(guess + salt)
   if (hashed.hexdigest() == hash):
     print(guess)
+    correct_guess_lts.write(guess)
     exit()
   return False
 
