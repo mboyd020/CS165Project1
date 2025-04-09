@@ -27,5 +27,5 @@ while True:
         if i >= 100000:
             break
     i += 1
-    passwords_current_array.append(line.strip().encode())
+    passwords_current_array.append(line.strip().replace("\n", "").encode())
     pool.map(guess, passwords_current_array)
