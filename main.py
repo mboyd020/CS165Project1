@@ -17,7 +17,7 @@ pool = Pool(cpu_count())
 # pool.map(guess, [b"123456", b"password", b"123456789", b"12345678", b"12345", b"1234567", b"qwerty", b"abc123", b"monkey", b"letmein", b"111111", b"123123", b"admin", b"welcome", b"1234567890"])
 
 total_passwords = 321272406
-
+print(pool)
 while True:
     i = 0
     passwords_current_array = []
