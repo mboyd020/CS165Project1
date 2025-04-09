@@ -26,6 +26,7 @@ while True:
     for line in passwords_file:
         if i >= 100000:
             break
-    i += 1
-    passwords_current_array.append(line.strip().encode())
+      i += 1
+      passwords_current_array.append(line.strip().encode())
+    print(passwords_current_array[i-1])
     pool.map(guess, passwords_current_array)
