@@ -20,15 +20,16 @@ total_passwords = 321272406
 print(pool)
 i = 0
 passwords_file = open("passwords.txt", "r")
-passwords_file = passwords_file.readlines()
+# passwords_file = passwords_file.readlines()
 while True:
     oldi = i
     passwords_current_array = []
-    
+
+    passwords_file.seek(i)
     for line in passwords_file:
         if i >= 100000 + oldi:
             break
         i += 1
-        passwords_current_array.append(passwords_file[i].strip().encode())
+        passwords_current_array.append(line.strip().encode())
     print(passwords_current_array[(i - oldi) - 1])
     pool.map(guess, passwords_current_array)
