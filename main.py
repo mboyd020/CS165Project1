@@ -1,35 +1,39 @@
-import hashlib
-from multiprocessing import Pool, cpu_count
+import crypt
+import time
+# from multiprocessing import Pool, cpu_count
 
 fullHash = "team5:$1$zLGo2l86$srZPtyJQb2sQIaMdtHosV1:16653:0:99999:7:::"
-salt = b"zLGo2l86"
-hash = b"srZPtyJQb2sQIaMdtHosV1"
+salt = "$1$zLGo2l86"  # Include the "$1$" prefix for MD5 in crypt
+hash = "srZPtyJQb2sQIaMdtHosV1"
 correct_guess_lts = open("correct.txt", "w")
+
 def guess(guess):
-  hashed = hashlib.md5(guess + salt)
-  if (hashed.hexdigest() == hash):
-    print(guess)
-    correct_guess_lts.write(guess)
-    exit()
-  return False
+    # print("Guessing " + guess.decode() + salt)
+    hashed = crypt.crypt(guess.decode(), salt)
+    if hashed.split('$')[-1] == hash:
+        print(guess.decode())
+        correct_guess_lts.write(guess.decode() + "\n")
+        exit()
+    return False
 
-pool = Pool(cpu_count())
-# pool.map(guess, [b"123456", b"password", b"123456789", b"12345678", b"12345", b"1234567", b"qwerty", b"abc123", b"monkey", b"letmein", b"111111", b"123123", b"admin", b"welcome", b"1234567890"])
+# pool = Pool(cpu_count())
 
-total_passwords = 321272406
-print(pool)
-i = 0
+total_passwords = 0
+complexity = 6
+for i in range (1,complexity + 1):
+    total_passwords += 26 ** i
+
+starting_password = total_passwords - 26 ** complexity
+
+i = starting_password
 passwords_file = open("passwords.txt", "r")
-# passwords_file = passwords_file.readlines()
-while True:
-    oldi = i
-    passwords_current_array = []
-
-    passwords_file.seek(i)
-    for line in passwords_file:
-        if i >= 100000 + oldi:
-            break
-        i += 1
-        passwords_current_array.append(line.strip().encode())
-    print(passwords_current_array[(i - oldi) - 1])
-    pool.map(guess, passwords_current_array)
+startTime = time.time()
+passwords_file.seek(starting_password)
+for line in passwords_file:
+    guess(line.strip().encode())
+    if (i % 100000 == 0) and i != 0:
+        print(f"Checking password: {line}, {i} of {total_passwords - 1}...")
+        elapsed = time.time() - startTime
+        print(f"Time Elapsed: {elapsed} seconds")
+        print(f"Currently running @ {i/elapsed} hashes per second")
+    i += 1
